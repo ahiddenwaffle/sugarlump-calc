@@ -24,42 +24,66 @@ loadGame = function () {
     str = Base64.decode(str);
     str = str.split('|');
     //console.log(str)
-    if (parseInt(str[4].split(';')[36]) == )
+   
     upgrades = str[6].split('')
     grandmas = str[5].split(';')[1].toString().split(',')[0]
     otherStuff = str[4]
     spl = str[2].split(';');
-    lumpT = otherStuff[44]
+    lumpT = parseInt(otherStuff[44])
     seed = spl[4];
-    var hour = 1000 * 60 * 60;
+    hour = 1000 * 60 * 60;
     lumpMatureAge = hour * 20;
     lumpRipeAge = hour * 23;
+    curve = false
     //console.log("lumpT: " + lumpT)
     //console.log("seed: " + seed)
     lumpCurrentType = 0;
+    elder = 0
+    if (otherStuff[9]) {
+        elder=1
+    }
     // What upgrades are owned?
-    if (upgrades[408 * 2]) {
+    if (upgrades[408 * 2]) { //heavenly upgrade
         var mestr = [upgrades[408 * 2], upgrades[408 * 2 + 1]];
         if (parseInt(mestr[1]) == 1) { 
-            lumpRipeAge-=hour
+            lumpRipeAge -= hour
+            sucralosia = true
         }
     }
-    if (upgrades[451 * 2]) {
+    if (upgrades[451 * 2]) { //sugar aging processes
         var mestr = [upgrades[451 * 2], upgrades[451 * 2 + 1]];
         if (parseInt(mestr[1]) == 1) {
             lumpRipeAge -= (6000 * Math.min(600, grandmas))
         }
     }
-
+    godLevel = document.getElementById("god").value //god
+    switch (godLevel) {
+        case "none":
+            break;
+        case "diamond":
+            lumpRipeAge -= hour
+            break;
+        case "ruby":
+            lumpRipeAge -= (hour / 3) * 2
+            break;
+        case "jade":
+            lumpRipeAge -= (hour / 3)
+            break;
+    }
+    if (parseInt(str[4].split(';')[36]) == 17 || parseInt(str[4].split(';')[37]) == 17){ //Dragon's curve
+        lumpRipeAge /= 1.05
+        curve = true
+    }
     for (elmo = 1; lumpCurrentType == 0; elmo++) {
         Math.seedrandom(seed + '/' + (lumpT + (lumpRipeAge + hour) * elmo));
         var rand = Math.random();
         var types = [0];
         var loop = 1;
+        if (curve) loop = 2;
         for (var i = 0; i < loop; i++) {
-            if (rand < (0.15)) types.push(1);//bifurcated
+            if (rand < ( sucralosia ? 0.15 : 0.1)) types.push(1);//bifurcated
             if (rand < 3 / 1000) types.push(2);//golden
-            if (rand < 0.1) types.push(3);//meaty
+            if (rand < 0.1*elder) types.push(3);//meaty
             if (rand < 1 / 50) types.push(4);//caramelized
         }
         lumpCurrentType = choose(types);
