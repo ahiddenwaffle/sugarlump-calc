@@ -51,6 +51,9 @@ loadGame = function () {
         case 0:
             lumpNexttype = "Normal"
             break;
+        case 1:
+            lumpNexttype = "Bifurcated"
+            break;      
         case 2:
             lumpNexttype = "Golden"
             break;
