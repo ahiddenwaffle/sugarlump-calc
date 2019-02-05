@@ -23,17 +23,34 @@ loadGame = function () {
     str = str.split('!END!')[0];
     str = Base64.decode(str);
     str = str.split('|');
-    console.log(str)
-    spl2n = str[4]
+    //console.log(str)
+    if (parseInt(str[4].split(';')[36]) == )
+    upgrades = str[6].split('')
+    grandmas = str[5].split(';')[1].toString().split(',')[0]
+    otherStuff = str[4]
     spl = str[2].split(';');
-    lumpT = spl2n[44]
+    lumpT = otherStuff[44]
     seed = spl[4];
     var hour = 1000 * 60 * 60;
     lumpMatureAge = hour * 20;
     lumpRipeAge = hour * 23;
-    console.log("lumpT: " + lumpT)
-    console.log("seed: " + seed)
+    //console.log("lumpT: " + lumpT)
+    //console.log("seed: " + seed)
     lumpCurrentType = 0;
+    // What upgrades are owned?
+    if (upgrades[408 * 2]) {
+        var mestr = [upgrades[408 * 2], upgrades[408 * 2 + 1]];
+        if (parseInt(mestr[1]) == 1) { 
+            lumpRipeAge-=hour
+        }
+    }
+    if (upgrades[451 * 2]) {
+        var mestr = [upgrades[451 * 2], upgrades[451 * 2 + 1]];
+        if (parseInt(mestr[1]) == 1) {
+            lumpRipeAge -= (6000 * Math.min(600, grandmas))
+        }
+    }
+
     for (elmo = 1; lumpCurrentType == 0; elmo++) {
         Math.seedrandom(seed + '/' + (lumpT + (lumpRipeAge + hour) * elmo));
         var rand = Math.random();
@@ -64,7 +81,7 @@ loadGame = function () {
             lumpNexttype = "Carmelized"
             break;
     }
-    document.getElementById("lump").innerHTML = "Your will have a " + lumpNexttype + " after " + elmo + " lumps";
+    document.getElementById("lump").innerHTML = "You will have a " + lumpNexttype + " after " + elmo + " lumps";
 }
 
     //ABOVE CODE "BORROWED" FROM  http://fthof-planner.s3-website.us-east-2.amazonaws.com/
