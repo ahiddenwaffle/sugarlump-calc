@@ -24,7 +24,7 @@ loadGame = function () {
     str = Base64.decode(str);
     str = str.split('|');
     //console.log(str)
-   
+    sucralosia = false
     upgrades = str[6].split('')
     grandmas = str[5].split(';')[1].toString().split(',')[0]
     otherStuff = str[4]
@@ -47,6 +47,11 @@ loadGame = function () {
         var mestr = [upgrades[408 * 2], upgrades[408 * 2 + 1]];
         if (parseInt(mestr[1]) == 1) { 
             lumpRipeAge -= hour
+        }
+    }
+    if (upgrades[410 * 2]) { //heavenly upgrade
+        var mestr = [upgrades[410 * 2], upgrades[410 * 2 + 1]];
+        if (parseInt(mestr[1]) == 1) {
             sucralosia = true
         }
     }
